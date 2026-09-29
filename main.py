@@ -9,7 +9,8 @@ app = FastAPI(title="Backend")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["*"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -22,3 +23,9 @@ def save_data(msg: Message):
     with DATA_FILE.open("a", encoding="utf-8") as f:
         f.write(msg.text + "\n")
     return {"status": "ok"}
+
+@app.get("/api/data")
+def read_data():
+    if not DATA_FILE.exists():
+        return {"content": ""}
+    return {"content": DATA_FILE.read_text(encoding="utf-8")}
