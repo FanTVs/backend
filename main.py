@@ -1,9 +1,12 @@
+import os
 from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-DATA_FILE = Path(__file__).parent / "data.txt"
+
+DATA_FILE = Path(os.getenv("DATA_FILE", Path(__file__).parent / "data.txt"))
+DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI(title="Backend")
 
